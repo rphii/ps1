@@ -1,4 +1,7 @@
 # ps1
 
-this does not work yet
+```sh
+export PS1='$(ps1 --nocolor)\[\r$(ps1)\] '
+```
+
 
