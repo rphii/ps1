@@ -5,7 +5,7 @@
 Set your `PS1` in your `~/.bashrc`:
 
 ```sh
-export PS1='$(ps1 -C)\[\r$(ps1)\] '
+PROMPT_COMMAND='PS1="$(ps1)"'
 ```
 
 Explanation:

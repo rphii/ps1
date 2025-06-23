@@ -74,7 +74,7 @@ int main(const int argc, const char **argv) {
     arg_init(arg, str_l(argv[0]), str("Pretty PS1 print written in C"),
             str("Project page: " F("https://github.com/rphii/ps1", FG_BL_B UL) "\n"
                 "To use it, put this in your .bashrc:\n"
-                "  export PS1='$(ps1 -C)\\[\\r$(ps1)\\] '"
+                "  PROMPT_COMMAND='PS1=\"$(ps1)\"'"
                 ));
     arg_init_width(arg, 100, 0);
     arg_init_show_help(arg, false);
