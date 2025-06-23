@@ -10,6 +10,7 @@ typedef struct PS1Config {
     StrFmtX fmt_time;
     StrFmtX fmt_user;
     StrFmtX fmt_path;
+    StrFmtX fmt_icon;
     Color col_path;
 } PS1Config;
 

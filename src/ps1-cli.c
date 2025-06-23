@@ -5,69 +5,28 @@
 #include <rphii/arg.h>
 #include <time.h>
 #include <pwd.h>
-#include <sys/ioctl.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <termios.h>
-#include <rphii/file.h>
 
-#include <ps1-config.h>
-
-
-int get_pos(int *x, int *y) {
-
-    char buf[30]={0};
-    int ret, i, pow;
-    char ch;
-
-    *y = 0; *x = 0;
-
-    struct termios term, restore;
-
-    tcgetattr(0, &term);
-    tcgetattr(0, &restore);
-    term.c_lflag &= ~(ICANON|ECHO);
-    tcsetattr(0, TCSANOW, &term);
-
-    write(1, "\033[6n", 4);
-
-    for( i = 0, ch = 0; ch != 'R'; i++ )
-    {
-        ret = read(0, &ch, 1);
-        if ( !ret ) {
-            tcsetattr(0, TCSANOW, &restore);
-            fprintf(stderr, "getpos: error reading response!\n");
-            return 1;
-        }
-        buf[i] = ch;
-        //printf("buf[%d]: \t%c \t%d\n", i, ch, ch);
-    }
-
-    if (i < 2) {
-        tcsetattr(0, TCSANOW, &restore);
-        //printf("i < 2\n");
-        return(1);
-    }
-
-    for( i -= 2, pow = 1; buf[i] != ';'; i--, pow *= 10)
-        *x = *x + ( buf[i] - '0' ) * pow;
-
-    for( i-- , pow = 1; buf[i] != '['; i--, pow *= 10)
-        *y = *y + ( buf[i] - '0' ) * pow;
-
-    tcsetattr(0, TCSANOW, &restore);
-    return 0;
-}
+#include "ps1-config.h"
 
 int main(const int argc, const char **argv) {
     
+    PS1Config config = {0};
     PS1Config preset = {
         .fmt_time.fg = {{ 0x767676ff }},
+        .fmt_time.bashsafe = true,
+        .fmt_time.nocolor = &config.nocolor,
+        .fmt_user.fg = {{ 0xd3777dff }},
+        .fmt_user.bashsafe = true,
+        .fmt_user.nocolor = &config.nocolor,
+        .fmt_icon.fg = {{ 0xffff00ff }},
+        .fmt_icon.bashsafe = true,
+        .fmt_icon.nocolor = &config.nocolor,
+        .fmt_path.fg = {{ 0x87af87ff }},
+        .fmt_path.bashsafe = true,
+        .fmt_path.nocolor = &config.nocolor,
     };
 
     int err = 0;
-    PS1Config config = {0};
     struct Arg *arg = arg_new();
     struct ArgX *x = 0;
     bool exit_early = false;
@@ -82,6 +41,7 @@ int main(const int argc, const char **argv) {
       argx_help(x, arg);
     x=argx_init(arg_opt(arg), 'C', str("nocolor"), str("output without color"));
       argx_bool(x, &config.nocolor, 0);
+
     x=argx_init(arg_opt(arg), 0, str("fmt-time-fg"), str("color of time foreground"));
       argx_col(x, &config.fmt_time.fg, &preset.fmt_time.fg);
     x=argx_init(arg_opt(arg), 0, str("fmt-time-bg"), str("color of time background"));
@@ -92,6 +52,40 @@ int main(const int argc, const char **argv) {
       argx_bool(x, &config.fmt_time.italic, &preset.fmt_time.italic);
     x=argx_init(arg_opt(arg), 0, str("fmt-time-underline"), str("time underline"));
       argx_bool(x, &config.fmt_time.underline, &preset.fmt_time.underline);
+
+    x=argx_init(arg_opt(arg), 0, str("fmt-user-fg"), str("color of user foreground"));
+      argx_col(x, &config.fmt_user.fg, &preset.fmt_user.fg);
+    x=argx_init(arg_opt(arg), 0, str("fmt-user-bg"), str("color of user background"));
+      argx_col(x, &config.fmt_user.bg, &preset.fmt_user.bg);
+    x=argx_init(arg_opt(arg), 0, str("fmt-user-bold"), str("user bold"));
+      argx_bool(x, &config.fmt_user.bold, &preset.fmt_user.bold);
+    x=argx_init(arg_opt(arg), 0, str("fmt-user-italic"), str("user italic"));
+      argx_bool(x, &config.fmt_user.italic, &preset.fmt_user.italic);
+    x=argx_init(arg_opt(arg), 0, str("fmt-user-underline"), str("user underline"));
+      argx_bool(x, &config.fmt_user.underline, &preset.fmt_user.underline);
+
+    x=argx_init(arg_opt(arg), 0, str("fmt-icon-fg"), str("color of icon foreground"));
+      argx_col(x, &config.fmt_icon.fg, &preset.fmt_icon.fg);
+    x=argx_init(arg_opt(arg), 0, str("fmt-icon-bg"), str("color of icon background"));
+      argx_col(x, &config.fmt_icon.bg, &preset.fmt_icon.bg);
+    x=argx_init(arg_opt(arg), 0, str("fmt-icon-bold"), str("icon bold"));
+      argx_bool(x, &config.fmt_icon.bold, &preset.fmt_icon.bold);
+    x=argx_init(arg_opt(arg), 0, str("fmt-icon-italic"), str("icon italic"));
+      argx_bool(x, &config.fmt_icon.italic, &preset.fmt_icon.italic);
+    x=argx_init(arg_opt(arg), 0, str("fmt-icon-underline"), str("icon underline"));
+      argx_bool(x, &config.fmt_icon.underline, &preset.fmt_icon.underline);
+
+    x=argx_init(arg_opt(arg), 0, str("fmt-path-fg"), str("color of path foreground"));
+      argx_col(x, &config.fmt_path.fg, &preset.fmt_path.fg);
+    x=argx_init(arg_opt(arg), 0, str("fmt-path-bg"), str("color of path background"));
+      argx_col(x, &config.fmt_path.bg, &preset.fmt_path.bg);
+    x=argx_init(arg_opt(arg), 0, str("fmt-path-bold"), str("path bold"));
+      argx_bool(x, &config.fmt_path.bold, &preset.fmt_path.bold);
+    x=argx_init(arg_opt(arg), 0, str("fmt-path-italic"), str("path italic"));
+      argx_bool(x, &config.fmt_path.italic, &preset.fmt_path.italic);
+    x=argx_init(arg_opt(arg), 0, str("fmt-path-underline"), str("path underline"));
+      argx_bool(x, &config.fmt_path.underline, &preset.fmt_path.underline);
+
 
     TRYC(arg_parse(arg, argc, argv, &exit_early));
     if(exit_early) goto clean;
@@ -105,28 +99,17 @@ int main(const int argc, const char **argv) {
     getcwd(ccwd, sizeof(ccwd));
     Str home = str_l(secure_getenv("HOME"));
     Str cwd = str_l(ccwd);
-
-    //Color col_time = {{ 0x767676ff }};
-    Color col_user = {{ 0xd3777dff }};
-    Color col_path = {{ 0x87af87ff }};
-    Color col_icon = {{ 0xffff00ff }};
-
-    StrFmtX x_time = config.fmt_time;
-    x_time.nocolor = &config.nocolor;
-    x_time.bashsafe = true;
-    StrFmtX x_user = config.nocolor ? (StrFmtX){0} : (StrFmtX){ .bashsafe = true, .fg = col_user };
-    StrFmtX x_icon = config.nocolor ? (StrFmtX){0} : (StrFmtX){ .bashsafe = true, .fg = col_icon };
     
     time_t rawtime;
     time(&rawtime);
     struct tm *timeinfo = localtime(&rawtime);
 
     /* format time */
-    str_fmtx(&out, x_time, "%02u:%02u", timeinfo->tm_hour, timeinfo->tm_min);
+    str_fmtx(&out, config.fmt_time, "%02u:%02u", timeinfo->tm_hour, timeinfo->tm_min);
     str_push(&out, ' ');
 
     /* format user */
-    str_fmtx(&out, x_user, "%.*s", STR_F(login));
+    str_fmtx(&out, config.fmt_user, "%.*s", STR_F(login));
     str_push(&out, ' ');
 
     /* format path */
@@ -144,10 +127,11 @@ int main(const int argc, const char **argv) {
     if(!str_cmp0(path, str("~/dev"))) icon = str("");
     if(!str_cmp0(path, str("~/Downloads"))) icon = str("󱃩");
     if(!str_cmp0(path, str("/var/db/repos/gentoo"))) icon = str("");
-    str_fmtx(&out, x_icon, "%.*s", STR_F(icon));
+    str_fmtx(&out, config.fmt_icon, "%.*s", STR_F(icon));
     str_push(&out, ' ');
 
     size_t depth = 0;
+    StrFmtX fmt_path = config.fmt_path;
     for(Str splice = {0}; str_splice(path, &splice, '/'); ++depth) {
         if(!splice.str) continue;
         bool single = (splice.str == path.str && ((!str_cmp(path, str("/"))) || (splice.str + splice.len == path.str + path.len)));
@@ -155,12 +139,14 @@ int main(const int argc, const char **argv) {
         bool first = !(splice.str > path.str);
         //if(last) col_path.rgba = 0x11ff11ff;
         char *folder = ((single && *splice.str == '/') || !first) ? "/" : "";
-        str_fmtx(&out, config.nocolor ? (StrFmtX){0} : (StrFmtX){ .bashsafe = true, .fg = col_path, .bold = single }, "%s", folder);
-        if(last && !single) col_path.rgba = 0xffffffff;
-        str_fmtx(&out, config.nocolor ? (StrFmtX){0} : (StrFmtX){  .bashsafe = true,.fg = col_path, .bold = last }, "%.*s", STR_F(splice));
-        col_path.r += 10;
-        col_path.g += 10;
-        col_path.b += 10;
+        fmt_path.bold = single;
+        str_fmtx(&out, config.nocolor ? (StrFmtX){0} : fmt_path, "%s", folder);
+        if(last && !single) fmt_path.fg.rgba = 0xffffffff;
+        fmt_path.bold = last;
+        str_fmtx(&out, config.nocolor ? (StrFmtX){0} : fmt_path, "%.*s", STR_F(splice));
+        fmt_path.fg.r += 10;
+        fmt_path.fg.g += 10;
+        fmt_path.fg.b += 10;
     }
     str_push(&out, ' ');
 
