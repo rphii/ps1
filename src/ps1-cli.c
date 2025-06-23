@@ -104,13 +104,17 @@ int main(const int argc, const char **argv) {
     time(&rawtime);
     struct tm *timeinfo = localtime(&rawtime);
 
+#if 1
     /* format time */
     str_fmtx(&out, config.fmt_time, "%02u:%02u", timeinfo->tm_hour, timeinfo->tm_min);
     str_push(&out, ' ');
+#endif
 
+#if 1
     /* format user */
     str_fmtx(&out, config.fmt_user, "%.*s", STR_F(login));
     str_push(&out, ' ');
+#endif
 
     /* format path */
     Str path = STR_DYN();
@@ -121,6 +125,7 @@ int main(const int argc, const char **argv) {
         path = cwd;
     }
 
+#if 1
     /* format last icon */
     Str icon = str("");
     if(!str_cmp0(path, str("~"))) icon = str("󱂟");
@@ -129,7 +134,9 @@ int main(const int argc, const char **argv) {
     if(!str_cmp0(path, str("/var/db/repos/gentoo"))) icon = str("");
     str_fmtx(&out, config.fmt_icon, "%.*s", STR_F(icon));
     str_push(&out, ' ');
+#endif
 
+#if 1
     size_t depth = 0;
     StrFmtX fmt_path = config.fmt_path;
     for(Str splice = {0}; str_splice(path, &splice, '/'); ++depth) {
@@ -140,14 +147,15 @@ int main(const int argc, const char **argv) {
         //if(last) col_path.rgba = 0x11ff11ff;
         char *folder = ((single && *splice.str == '/') || !first) ? "/" : "";
         fmt_path.bold = single;
-        str_fmtx(&out, config.nocolor ? (StrFmtX){0} : fmt_path, "%s", folder);
+        str_fmtx(&out, fmt_path, "%s", folder);
         if(last && !single) fmt_path.fg.rgba = 0xffffffff;
         fmt_path.bold = last;
-        str_fmtx(&out, config.nocolor ? (StrFmtX){0} : fmt_path, "%.*s", STR_F(splice));
+        str_fmtx(&out, fmt_path, "%.*s", STR_F(splice));
         fmt_path.fg.r += 10;
         fmt_path.fg.g += 10;
         fmt_path.fg.b += 10;
     }
+#endif
     str_push(&out, ' ');
 
     str_print(out);
