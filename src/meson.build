@@ -3,7 +3,7 @@ headers = [
   ]
 
 src = [
-  'main.c',
+  'ps1-cli.c',
   ]
 
 cc = meson.get_compiler('c')
