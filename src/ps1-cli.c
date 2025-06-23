@@ -13,17 +13,9 @@ int main(const int argc, const char **argv) {
     PS1Config config = {0};
     PS1Config preset = {
         .fmt_time.fg = {{ 0x767676ff }},
-        .fmt_time.bashsafe = true,
-        .fmt_time.nocolor = &config.nocolor,
         .fmt_user.fg = {{ 0xd3777dff }},
-        .fmt_user.bashsafe = true,
-        .fmt_user.nocolor = &config.nocolor,
         .fmt_icon.fg = {{ 0xffff00ff }},
-        .fmt_icon.bashsafe = true,
-        .fmt_icon.nocolor = &config.nocolor,
         .fmt_path.fg = {{ 0x87af87ff }},
-        .fmt_path.bashsafe = true,
-        .fmt_path.nocolor = &config.nocolor,
     };
 
     int err = 0;
@@ -89,6 +81,11 @@ int main(const int argc, const char **argv) {
 
     TRYC(arg_parse(arg, argc, argv, &exit_early));
     if(exit_early) goto clean;
+
+    config.fmt_time.bashsafe = true;
+    config.fmt_user.bashsafe = true;
+    config.fmt_icon.bashsafe = true;
+    config.fmt_path.bashsafe = true;
 
     uid_t uid = getuid();
     struct passwd *pw = getpwuid(uid);
