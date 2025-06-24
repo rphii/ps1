@@ -7,6 +7,7 @@
 typedef struct PS1Config {
     bool nocolor;
     bool fixspacing;
+    int exitcode;
     StrFmtX fmt_time;
     StrFmtX fmt_user;
     StrFmtX fmt_path;

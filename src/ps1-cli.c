@@ -25,7 +25,7 @@ int main(const int argc, const char **argv) {
     arg_init(arg, str_l(argv[0]), str("Pretty PS1 print written in C"),
             str("Project page: " F("https://github.com/rphii/ps1", FG_BL_B UL) "\n"
                 "To use it, put this in your .bashrc:\n"
-                "  PROMPT_COMMAND='PS1=\"$(ps1)\"'"
+                "  PROMPT_COMMAND='PS1=\"$(ps1 -X $?)\"'"
                 ));
     arg_init_width(arg, 100, 0);
     arg_init_show_help(arg, false);
@@ -33,6 +33,8 @@ int main(const int argc, const char **argv) {
       argx_help(x, arg);
     x=argx_init(arg_opt(arg), 'C', str("nocolor"), str("output without color"));
       argx_bool(x, &config.nocolor, 0);
+    x=argx_init(arg_opt(arg), 'X', str("exitcode"), str("set exit code of ps1"));
+      argx_int(x, &config.exitcode, 0);
 
     x=argx_init(arg_opt(arg), 0, str("fmt-time-fg"), str("color of time foreground"));
       argx_col(x, &config.fmt_time.fg, &preset.fmt_time.fg);
@@ -160,8 +162,9 @@ int main(const int argc, const char **argv) {
 clean:
     str_free(&out);
     str_free(&path);
-    return err;
+    return config.exitcode;
+    //return err;
 error:
-    ERR_CLEAN;
+    goto clean;
 }
 
