@@ -29,8 +29,8 @@ int main(const int argc, const char **argv) {
                 ));
     arg_init_width(arg, 100, 0);
     arg_init_show_help(arg, false);
-    x=argx_init(arg_opt(arg), 'h', str("help"), str("display this help"));
-      argx_help(x, arg);
+    argx_builtin_opt_help(arg);
+    argx_builtin_env_compgen(arg);
     x=argx_init(arg_opt(arg), 'C', str("nocolor"), str("output without color"));
       argx_bool(x, &config.nocolor, 0);
     x=argx_init(arg_opt(arg), 'X', str("exitcode"), str("set exit code of ps1"));
