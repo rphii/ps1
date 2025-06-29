@@ -45,11 +45,11 @@ int main(const int argc, const char **argv) {
     x=argx_init(o, 0, str("fmt-time"), str("time formatting"));
       argx_builtin_opt_fmtx(x, &config.fmt_time, &preset.fmt_time);
     x=argx_init(o, 0, str("fmt-user"), str("user formatting"));
-      argx_builtin_opt_fmtx(x, &config.fmt_user, &preset.fmt_time);
+      argx_builtin_opt_fmtx(x, &config.fmt_user, &preset.fmt_user);
     x=argx_init(o, 0, str("fmt-icon"), str("icon formatting"));
-      argx_builtin_opt_fmtx(x, &config.fmt_icon, &preset.fmt_time);
+      argx_builtin_opt_fmtx(x, &config.fmt_icon, &preset.fmt_icon);
     x=argx_init(o, 0, str("fmt-path"), str("path formatting"));
-      argx_builtin_opt_fmtx(x, &config.fmt_path, &preset.fmt_time);
+      argx_builtin_opt_fmtx(x, &config.fmt_path, &preset.fmt_path);
 
     o=argx_group(arg, str("Environment Variables"), false);
     argx_builtin_env_compgen(o);
