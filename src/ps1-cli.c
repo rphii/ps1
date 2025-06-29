@@ -31,7 +31,7 @@ int main(const int argc, const char **argv) {
 
     arg_init_show_help(arg, false);
 
-    o=argx_group(arg, str("Options"));
+    o=argx_group(arg, str("Options"), false);
     argx_builtin_opt_help(o);
     argx_builtin_opt_source(o, str("/etc/ps1/ps1.conf"));
     argx_builtin_opt_source(o, str("$HOME/.config/rphiic/colors.conf"));
@@ -86,10 +86,10 @@ int main(const int argc, const char **argv) {
     x=argx_init(o, 0, str("fmt-path-underline"), str("path underline"));
       argx_bool(x, &config.fmt_path.underline, &preset.fmt_path.underline);
 
-    o=argx_group(arg, str("Environment Variables"));
+    o=argx_group(arg, str("Environment Variables"), false);
     argx_builtin_env_compgen(o);
 
-    o=argx_group(arg, str("Color Adjustments"));
+    o=argx_group(arg, str("Color Adjustments"), true);
     argx_builtin_opt_rice(o);
 
     TRYC(arg_parse(arg, argc, argv, &exit_early));
