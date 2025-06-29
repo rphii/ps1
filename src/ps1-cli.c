@@ -32,11 +32,11 @@ int main(const int argc, const char **argv) {
     arg_init_show_help(arg, false);
 
     o=argx_group(arg, str("Options"));
+    argx_builtin_opt_help(o);
     argx_builtin_opt_source(o, str("/etc/ps1/ps1.conf"));
     argx_builtin_opt_source(o, str("$HOME/.config/rphiic/colors.conf"));
     argx_builtin_opt_source(o, str("$HOME/.config/ps1/ps1.conf"));
     argx_builtin_opt_source(o, str("$XDG_CONFIG_HOME/ps1/ps1.conf"));
-    argx_builtin_opt_help(o);
     x=argx_init(o, 'C', str("nocolor"), str("output without color"));
       argx_bool(x, &config.nocolor, 0);
     x=argx_init(o, 'X', str("exitcode"), str("set exit code of ps1"));
