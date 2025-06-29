@@ -42,49 +42,14 @@ int main(const int argc, const char **argv) {
     x=argx_init(o, 'X', str("exitcode"), str("set exit code of ps1"));
       argx_int(x, &config.exitcode, 0);
 
-    x=argx_init(o, 0, str("fmt-time-fg"), str("color of time foreground"));
-      argx_col(x, &config.fmt_time.fg, &preset.fmt_time.fg);
-    x=argx_init(o, 0, str("fmt-time-bg"), str("color of time background"));
-      argx_col(x, &config.fmt_time.bg, &preset.fmt_time.bg);
-    x=argx_init(o, 0, str("fmt-time-bold"), str("time bold"));
-      argx_bool(x, &config.fmt_time.bold, &preset.fmt_time.bold);
-    x=argx_init(o, 0, str("fmt-time-italic"), str("time italic"));
-      argx_bool(x, &config.fmt_time.italic, &preset.fmt_time.italic);
-    x=argx_init(o, 0, str("fmt-time-underline"), str("time underline"));
-      argx_bool(x, &config.fmt_time.underline, &preset.fmt_time.underline);
-
-    x=argx_init(o, 0, str("fmt-user-fg"), str("color of user foreground"));
-      argx_col(x, &config.fmt_user.fg, &preset.fmt_user.fg);
-    x=argx_init(o, 0, str("fmt-user-bg"), str("color of user background"));
-      argx_col(x, &config.fmt_user.bg, &preset.fmt_user.bg);
-    x=argx_init(o, 0, str("fmt-user-bold"), str("user bold"));
-      argx_bool(x, &config.fmt_user.bold, &preset.fmt_user.bold);
-    x=argx_init(o, 0, str("fmt-user-italic"), str("user italic"));
-      argx_bool(x, &config.fmt_user.italic, &preset.fmt_user.italic);
-    x=argx_init(o, 0, str("fmt-user-underline"), str("user underline"));
-      argx_bool(x, &config.fmt_user.underline, &preset.fmt_user.underline);
-
-    x=argx_init(o, 0, str("fmt-icon-fg"), str("color of icon foreground"));
-      argx_col(x, &config.fmt_icon.fg, &preset.fmt_icon.fg);
-    x=argx_init(o, 0, str("fmt-icon-bg"), str("color of icon background"));
-      argx_col(x, &config.fmt_icon.bg, &preset.fmt_icon.bg);
-    x=argx_init(o, 0, str("fmt-icon-bold"), str("icon bold"));
-      argx_bool(x, &config.fmt_icon.bold, &preset.fmt_icon.bold);
-    x=argx_init(o, 0, str("fmt-icon-italic"), str("icon italic"));
-      argx_bool(x, &config.fmt_icon.italic, &preset.fmt_icon.italic);
-    x=argx_init(o, 0, str("fmt-icon-underline"), str("icon underline"));
-      argx_bool(x, &config.fmt_icon.underline, &preset.fmt_icon.underline);
-
-    x=argx_init(o, 0, str("fmt-path-fg"), str("color of path foreground"));
-      argx_col(x, &config.fmt_path.fg, &preset.fmt_path.fg);
-    x=argx_init(o, 0, str("fmt-path-bg"), str("color of path background"));
-      argx_col(x, &config.fmt_path.bg, &preset.fmt_path.bg);
-    x=argx_init(o, 0, str("fmt-path-bold"), str("path bold"));
-      argx_bool(x, &config.fmt_path.bold, &preset.fmt_path.bold);
-    x=argx_init(o, 0, str("fmt-path-italic"), str("path italic"));
-      argx_bool(x, &config.fmt_path.italic, &preset.fmt_path.italic);
-    x=argx_init(o, 0, str("fmt-path-underline"), str("path underline"));
-      argx_bool(x, &config.fmt_path.underline, &preset.fmt_path.underline);
+    x=argx_init(o, 0, str("fmt-time"), str("time formatting"));
+      argx_builtin_opt_fmtx(x, &config.fmt_time);
+    x=argx_init(o, 0, str("fmt-user"), str("user formatting"));
+      argx_builtin_opt_fmtx(x, &config.fmt_user);
+    x=argx_init(o, 0, str("fmt-icon"), str("icon formatting"));
+      argx_builtin_opt_fmtx(x, &config.fmt_icon);
+    x=argx_init(o, 0, str("fmt-path"), str("path formatting"));
+      argx_builtin_opt_fmtx(x, &config.fmt_path);
 
     o=argx_group(arg, str("Environment Variables"), false);
     argx_builtin_env_compgen(o);
