@@ -21,65 +21,76 @@ int main(const int argc, const char **argv) {
     int err = 0;
     struct Arg *arg = arg_new();
     struct ArgX *x = 0;
+    struct ArgXGroup *o = 0;
     bool exit_early = false;
     arg_init(arg, str_l(argv[0]), str("Pretty PS1 print written in C"),
             str("Project page: " F("https://github.com/rphii/ps1", FG_BL_B UL) "\n"
                 "To use it, put this in your .bashrc:\n"
                 "  PROMPT_COMMAND='PS1=\"$(ps1 -X $?)\"'"
                 ));
-    arg_init_width(arg, 100, 0);
+
     arg_init_show_help(arg, false);
-    argx_builtin_opt_help(arg);
-    argx_builtin_env_compgen(arg);
-    x=argx_init(arg_opt(arg), 'C', str("nocolor"), str("output without color"));
+
+    o=argx_group(arg, str("Options"));
+    argx_builtin_opt_source(o, str("/etc/ps1/ps1.conf"));
+    argx_builtin_opt_source(o, str("$HOME/.config/rphiic/colors.conf"));
+    argx_builtin_opt_source(o, str("$HOME/.config/ps1/ps1.conf"));
+    argx_builtin_opt_source(o, str("$XDG_CONFIG_HOME/ps1/ps1.conf"));
+    argx_builtin_opt_help(o);
+    x=argx_init(o, 'C', str("nocolor"), str("output without color"));
       argx_bool(x, &config.nocolor, 0);
-    x=argx_init(arg_opt(arg), 'X', str("exitcode"), str("set exit code of ps1"));
+    x=argx_init(o, 'X', str("exitcode"), str("set exit code of ps1"));
       argx_int(x, &config.exitcode, 0);
 
-    x=argx_init(arg_opt(arg), 0, str("fmt-time-fg"), str("color of time foreground"));
+    x=argx_init(o, 0, str("fmt-time-fg"), str("color of time foreground"));
       argx_col(x, &config.fmt_time.fg, &preset.fmt_time.fg);
-    x=argx_init(arg_opt(arg), 0, str("fmt-time-bg"), str("color of time background"));
+    x=argx_init(o, 0, str("fmt-time-bg"), str("color of time background"));
       argx_col(x, &config.fmt_time.bg, &preset.fmt_time.bg);
-    x=argx_init(arg_opt(arg), 0, str("fmt-time-bold"), str("time bold"));
+    x=argx_init(o, 0, str("fmt-time-bold"), str("time bold"));
       argx_bool(x, &config.fmt_time.bold, &preset.fmt_time.bold);
-    x=argx_init(arg_opt(arg), 0, str("fmt-time-italic"), str("time italic"));
+    x=argx_init(o, 0, str("fmt-time-italic"), str("time italic"));
       argx_bool(x, &config.fmt_time.italic, &preset.fmt_time.italic);
-    x=argx_init(arg_opt(arg), 0, str("fmt-time-underline"), str("time underline"));
+    x=argx_init(o, 0, str("fmt-time-underline"), str("time underline"));
       argx_bool(x, &config.fmt_time.underline, &preset.fmt_time.underline);
 
-    x=argx_init(arg_opt(arg), 0, str("fmt-user-fg"), str("color of user foreground"));
+    x=argx_init(o, 0, str("fmt-user-fg"), str("color of user foreground"));
       argx_col(x, &config.fmt_user.fg, &preset.fmt_user.fg);
-    x=argx_init(arg_opt(arg), 0, str("fmt-user-bg"), str("color of user background"));
+    x=argx_init(o, 0, str("fmt-user-bg"), str("color of user background"));
       argx_col(x, &config.fmt_user.bg, &preset.fmt_user.bg);
-    x=argx_init(arg_opt(arg), 0, str("fmt-user-bold"), str("user bold"));
+    x=argx_init(o, 0, str("fmt-user-bold"), str("user bold"));
       argx_bool(x, &config.fmt_user.bold, &preset.fmt_user.bold);
-    x=argx_init(arg_opt(arg), 0, str("fmt-user-italic"), str("user italic"));
+    x=argx_init(o, 0, str("fmt-user-italic"), str("user italic"));
       argx_bool(x, &config.fmt_user.italic, &preset.fmt_user.italic);
-    x=argx_init(arg_opt(arg), 0, str("fmt-user-underline"), str("user underline"));
+    x=argx_init(o, 0, str("fmt-user-underline"), str("user underline"));
       argx_bool(x, &config.fmt_user.underline, &preset.fmt_user.underline);
 
-    x=argx_init(arg_opt(arg), 0, str("fmt-icon-fg"), str("color of icon foreground"));
+    x=argx_init(o, 0, str("fmt-icon-fg"), str("color of icon foreground"));
       argx_col(x, &config.fmt_icon.fg, &preset.fmt_icon.fg);
-    x=argx_init(arg_opt(arg), 0, str("fmt-icon-bg"), str("color of icon background"));
+    x=argx_init(o, 0, str("fmt-icon-bg"), str("color of icon background"));
       argx_col(x, &config.fmt_icon.bg, &preset.fmt_icon.bg);
-    x=argx_init(arg_opt(arg), 0, str("fmt-icon-bold"), str("icon bold"));
+    x=argx_init(o, 0, str("fmt-icon-bold"), str("icon bold"));
       argx_bool(x, &config.fmt_icon.bold, &preset.fmt_icon.bold);
-    x=argx_init(arg_opt(arg), 0, str("fmt-icon-italic"), str("icon italic"));
+    x=argx_init(o, 0, str("fmt-icon-italic"), str("icon italic"));
       argx_bool(x, &config.fmt_icon.italic, &preset.fmt_icon.italic);
-    x=argx_init(arg_opt(arg), 0, str("fmt-icon-underline"), str("icon underline"));
+    x=argx_init(o, 0, str("fmt-icon-underline"), str("icon underline"));
       argx_bool(x, &config.fmt_icon.underline, &preset.fmt_icon.underline);
 
-    x=argx_init(arg_opt(arg), 0, str("fmt-path-fg"), str("color of path foreground"));
+    x=argx_init(o, 0, str("fmt-path-fg"), str("color of path foreground"));
       argx_col(x, &config.fmt_path.fg, &preset.fmt_path.fg);
-    x=argx_init(arg_opt(arg), 0, str("fmt-path-bg"), str("color of path background"));
+    x=argx_init(o, 0, str("fmt-path-bg"), str("color of path background"));
       argx_col(x, &config.fmt_path.bg, &preset.fmt_path.bg);
-    x=argx_init(arg_opt(arg), 0, str("fmt-path-bold"), str("path bold"));
+    x=argx_init(o, 0, str("fmt-path-bold"), str("path bold"));
       argx_bool(x, &config.fmt_path.bold, &preset.fmt_path.bold);
-    x=argx_init(arg_opt(arg), 0, str("fmt-path-italic"), str("path italic"));
+    x=argx_init(o, 0, str("fmt-path-italic"), str("path italic"));
       argx_bool(x, &config.fmt_path.italic, &preset.fmt_path.italic);
-    x=argx_init(arg_opt(arg), 0, str("fmt-path-underline"), str("path underline"));
+    x=argx_init(o, 0, str("fmt-path-underline"), str("path underline"));
       argx_bool(x, &config.fmt_path.underline, &preset.fmt_path.underline);
 
+    o=argx_group(arg, str("Environment Variables"));
+    argx_builtin_env_compgen(o);
+
+    o=argx_group(arg, str("Color Adjustments"));
+    argx_builtin_opt_rice(o);
 
     TRYC(arg_parse(arg, argc, argv, &exit_early));
     if(exit_early) goto clean;
