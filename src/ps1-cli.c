@@ -107,6 +107,7 @@ int main(const int argc, const char **argv) {
     if(!str_cmp0(path, str("~/dev"))) icon = str("");
     if(!str_cmp0(path, str("~/Downloads"))) icon = str("󱃩");
     if(!str_cmp0(path, str("/var/db/repos/gentoo"))) icon = str("");
+    if(!str_cmp0(path, str("~/.config"))) icon = str("");
     str_fmtx(&out, config.fmt_icon, "%.*s", STR_F(icon));
     str_push(&out, ' ');
 #endif
