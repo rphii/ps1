@@ -15,6 +15,7 @@ int ps1_sub(void *void_state) {
     array_resize(state->icons, len);
     Str **icon = array_it(state->icons, len - 1);
     *icon = malloc(sizeof(**icon));
+    if(argx_get(state->dynarg.icons, recent)) return 0;
     struct ArgX *x=argx_init(state->dynarg.icons, 0, recent, str(""));
     argx_str(x, *icon, 0);
     return 0;
