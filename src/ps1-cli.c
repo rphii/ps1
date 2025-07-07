@@ -81,9 +81,13 @@ int main(const int argc, const char **argv) {
     if(exit_early) goto clean;
 
     state.config.fmt_time.bashsafe = true;
+    state.config.fmt_time.nocolor = &state.config.nocolor;
     state.config.fmt_user.bashsafe = true;
+    state.config.fmt_user.nocolor = &state.config.nocolor;
     state.config.fmt_icon.bashsafe = true;
+    state.config.fmt_icon.nocolor = &state.config.nocolor;
     state.config.fmt_path.bashsafe = true;
+    state.config.fmt_path.nocolor = &state.config.nocolor;
 
     uid_t uid = getuid();
     struct passwd *pw = getpwuid(uid);
