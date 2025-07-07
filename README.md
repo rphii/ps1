@@ -1,3 +1,5 @@
+# WORK IN PROGRESS! LIKELY TO BE UNSTABLE!
+
 # ps1
 
 ## usage
@@ -15,5 +17,25 @@ PROMPT_COMMAND='PS1="$(ps1 -X $?)"'
 ```
 meson setup build
 meson install -C build
+```
+
+## example config
+
+e.g. `[~/.config/ps1/ps1.config]` or see `ps1 -h --source` for other paths
+
+```
+# subscribe to certain paths (before assigning icons)
+sub = ~
+sub = ~/dev
+sub = ~/Downloads 
+sub = ~/.config
+sub = /var/db/repos/gentoo
+
+# now assign a few icons
+icon = ~ = 󱂟
+icon = ~/dev = 
+icon = ~/Downloads = 󱃩
+icon = ~/.config = 
+icon = /var/db/repos/gentoo = 
 ```
 
