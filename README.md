@@ -21,7 +21,9 @@ meson install -C build
 
 ## example config
 
-e.g. `[~/.config/ps1/ps1.config]` or see `ps1 -h --source` for other paths
+E.g. `~/.config/ps1/ps1.config` or see `ps1 -h --source` for other paths
+
+*The icons may display wrong, but they somehow work for me. You can put any string you think, basically.*
 
 ```
 # subscribe to certain paths (before assigning icons)
