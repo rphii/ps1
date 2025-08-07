@@ -1,17 +1,16 @@
 #ifndef PS1_CONFIG_H
 
 #include <stdbool.h>
-#include <rphii/color.h>
-#include <rphii/str.h>
+#include <rl/so.h>
 
 typedef struct PS1Config {
     bool nocolor;
     bool fixspacing;
     int exitcode;
-    StrFmtX fmt_time;
-    StrFmtX fmt_user;
-    StrFmtX fmt_path;
-    StrFmtX fmt_icon;
+    So_Fx fmt_time;
+    So_Fx fmt_user;
+    So_Fx fmt_path;
+    So_Fx fmt_icon;
     Color col_path;
 } PS1Config;
 

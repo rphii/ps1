@@ -7,10 +7,12 @@ src = [
   ]
 
 cc = meson.get_compiler('c')
-dep_rphiic = dependency('rphiic', required: true)
+dep_rlc = dependency('rlc', required: true)
+dep_rlso = dependency('rlso', required: true)
+dep_rlarg = dependency('rlarg', required: true)
 
 whvn_cli = executable('ps1',
   src,
-  dependencies: [dep_rphiic],
+  dependencies: [dep_rlc, dep_rlso, dep_rlarg],
   install: true,
 )

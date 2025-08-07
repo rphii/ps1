@@ -1,14 +1,14 @@
 #ifndef PS1_STATE_H
 
-#include <rphii/str.h>
-#include <rphii/arg.h>
+#include <rl/so.h>
+#include <rl/arg.h>
 #include "ps1-config.h"
 
 typedef struct PS1State {
     PS1Config config;
     PS1Config preset;
-    VStr subs;
-    Str **icons;
+    VSo subs;
+    So **icons;
     struct {
         struct ArgXGroup *icons;
     } dynarg;
