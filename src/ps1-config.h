@@ -1,7 +1,7 @@
 #ifndef PS1_CONFIG_H
 
 #include <stdbool.h>
-#include <rl/so.h>
+#include <rlso.h>
 
 typedef struct PS1Config {
     bool nocolor;

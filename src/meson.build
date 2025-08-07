@@ -7,12 +7,25 @@ src = [
   ]
 
 cc = meson.get_compiler('c')
-dep_rlc = dependency('rlc', required: true)
-dep_rlso = dependency('rlso', required: true)
-dep_rlarg = dependency('rlarg', required: true)
+
+rlarg_dep = dependency('rlarg',
+  fallback : ['rlarg', 'rlarg_dep'],
+  default_options: ['default_library=static']
+)
+
+rlso_dep = dependency('rlso',
+  fallback : ['rlso', 'rlso_dep'],
+  default_options: ['default_library=static']
+)
+
+rlc_dep = dependency('rlc',
+  fallback : ['rlc', 'rlc_dep'],
+  default_options: ['default_library=static']
+)
+
 
 whvn_cli = executable('ps1',
   src,
-  dependencies: [dep_rlc, dep_rlso, dep_rlarg],
+  dependencies: [rlc_dep, rlso_dep, rlarg_dep],
   install: true,
 )

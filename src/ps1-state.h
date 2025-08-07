@@ -1,7 +1,7 @@
 #ifndef PS1_STATE_H
 
-#include <rl/so.h>
-#include <rl/arg.h>
+#include <rlso.h>
+#include <rlarg.h>
 #include "ps1-config.h"
 
 typedef struct PS1State {

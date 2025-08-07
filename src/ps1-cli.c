@@ -1,9 +1,9 @@
 #define _GNU_SOURCE
 #include <unistd.h>
 #include <linux/limits.h>
-#include <rl/so.h>
-#include <rl/arg.h>
-#include <rl/array.h>
+#include <rlso.h>
+#include <rlarg.h>
+#include <rlc/array.h>
 #include <time.h>
 #include <pwd.h>
 
@@ -82,6 +82,7 @@ int main(const int argc, const char **argv) {
     TRYC(arg_parse(arg, argc, argv, &exit_early));
     if(exit_early) goto clean;
 
+
     state.config.fmt_time.bashsafe = true;
     state.config.fmt_time.nocolor = &state.config.nocolor;
     state.config.fmt_user.bashsafe = true;
@@ -132,10 +133,10 @@ int main(const int argc, const char **argv) {
     So icon = so("");
     for(size_t i = 0; i < array_len(state.subs); ++i) {
         So path0 = array_at(state.subs, i);
-        So icon0 = *array_at(state.icons, i);
+        So *icon0 = array_at(state.icons, i);
         //printff("CMP[%.*s|%.*s]", SO_F(path),SO_F(path0));
         if(!so_cmp0(path, path0)) {
-            icon = icon0;
+            icon = *icon0;
             //printff("GOT ICON:[%.*s]", SO_F(icon));
         }
         
@@ -183,6 +184,7 @@ int main(const int argc, const char **argv) {
 clean:
     so_free(&out);
     so_free(&path);
+    arg_free(&arg);
     return state.config.exitcode;
     //return err;
 error:
