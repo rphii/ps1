@@ -1,0 +1,7 @@
+*.vim
+*.out
+.cache
+*.tmp
+subprojects/*
+!subprojects/*.wrap
+

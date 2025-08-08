@@ -75,6 +75,9 @@ int main(const int argc, const char **argv) {
 
     o=argx_group(arg, so("Environment Variables"), false);
     argx_builtin_env_compgen(o);
+    x=argx_init(o, 0, so("HOME"), so("home path"));
+      argx_str(x, &state.home, 0);
+
 
     o=argx_group(arg, so("Color Adjustments"), true);
     argx_builtin_opt_rice(o);
@@ -99,7 +102,8 @@ int main(const int argc, const char **argv) {
     char ccwd[PATH_MAX];
     So login = so_l(pw ? pw->pw_name : "(?)");
     getcwd(ccwd, sizeof(ccwd));
-    So home = so_l(secure_getenv("HOME"));
+    //So home = so_l(secure_getenv("HOME"));
+    So home = state.home;
     So cwd = so_l(ccwd);
     
     time_t rawtime;

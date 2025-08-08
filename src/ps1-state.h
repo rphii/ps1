@@ -9,6 +9,7 @@ typedef struct PS1State {
     PS1Config preset;
     VSo subs;
     So **icons;
+    So home;
     struct {
         struct ArgXGroup *icons;
     } dynarg;
