@@ -9,6 +9,10 @@
 
 #include "ps1-state.h"
 
+void icon_free(So **so) {
+    free(*so);
+}
+
 int ps1_sub(void *void_state) {
     PS1State *state = (PS1State *)void_state;
     size_t len = array_len(state->subs);
@@ -75,7 +79,7 @@ int main(const int argc, const char **argv) {
 
     o=argx_group(arg, so("Environment Variables"), false);
     argx_builtin_env_compgen(o);
-    x=argx_init(o, 0, so("HOME"), so("home path"));
+    x=argx_env(o, so("HOME"), so("home path"), false);
       argx_str(x, &state.home, 0);
 
 
@@ -189,6 +193,9 @@ clean:
     so_free(&out);
     so_free(&path);
     arg_free(&arg);
+    vso_free(&state.subs);
+    array_free_set(state.icons, So *, (ArrayFree)icon_free);
+    array_free(state.icons);
     return state.config.exitcode;
     //return err;
 error:
