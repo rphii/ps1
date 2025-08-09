@@ -16,6 +16,7 @@ void icon_free(So **so) {
 int ps1_sub(void *void_state) {
     PS1State *state = (PS1State *)void_state;
     size_t len = array_len(state->subs);
+    if(!len) return 0;
     So recent = array_at(state->subs, len - 1);
     array_resize(state->icons, len);
     So **icon = array_it(state->icons, len - 1);
