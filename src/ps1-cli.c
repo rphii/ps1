@@ -195,8 +195,7 @@ clean:
     so_free(&path);
     arg_free(&arg);
     vso_free(&state.subs);
-    array_free_set(state.icons, So *, (ArrayFree)icon_free);
-    array_free(state.icons);
+    array_free_ext(state.icons, icon_free);
     return state.config.exitcode;
     //return err;
 error:
